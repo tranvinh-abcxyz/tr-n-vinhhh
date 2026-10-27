@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hỗ Trợ Kéo Tâm Pro - Nâng Tầm Kỹ Năng Bắn Headshot 100%</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Orbitron & Rajdhani -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            black: '#090a0f',
+                            dark: '#11131c',
+                            card: '#181b28',
+                            red: '#ff003c',
+                            orange: '#ff5500',
+                            neon: '#ff2a00',
+                            yellow: '#ffcc00'
+                        }
+                    },
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        rajdhani: ['Rajdhani', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-glow': 'pulseGlow 2s infinite',
+                        'crosshair-spin': 'spin 12s linear infinite',
+                        'radar-sweep': 'radarSweep 3s linear infinite',
+                    },
+                    keyframes: {
+                        pulseGlow: {
+                            '0%, 100%': { filter: 'drop-shadow(0 0 15px rgba(255, 0, 60, 0.8))' },
+                            '50%': { filter: 'drop-shadow(0 0 30px rgba(255, 85, 0, 1))' }
+                        },
+                        radarSweep: {
+                            '0%': { transform: 'rotate(0deg)' },
+                            '100%': { transform: 'rotate(360deg)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: #090a0f;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        /* Custom Neon Glow Effects */
+        .neon-border-red {
+            box-shadow: 0 0 15px rgba(255, 0, 60, 0.4), inset 0 0 15px rgba(255, 0, 60, 0.2);
+            border: 1px solid rgba(255, 0, 60, 0.6);
+        }
+
+        .neon-border-orange {
+            box-shadow: 0 0 15px rgba(255, 85, 0, 0.4), inset 0 0 15px rgba(255, 85, 0, 0.2);
+            border: 1px solid rgba(255, 85, 0, 0.6);
+        }
+
+        .neon-text-red {
+            text-shadow: 0 0 10px rgba(255, 0, 60, 0.8), 0 0 20px rgba(255, 0, 60, 0.5);
+        }
+
+        .neon-text-orange {
+            text-shadow: 0 0 10px rgba(255, 85, 0, 0.8), 0 0 20px rgba(255, 85, 0, 0.5);
+        }
+
+        .cyber-btn {
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+            transition: all 0.3s ease;
+        }
+
+        .cyber-btn:hover {
+            box-shadow: 0 0 25px rgba(255, 0, 60, 0.9);
+            transform: translateY(-2px);
+        }
+
+        /* Cyberpunk Grid Background */
+        .cyber-grid {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 0, 60, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 0, 60, 0.05) 1px, transparent 1px);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090a0f;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ff003c;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff5500;
+        }
+    </style>
+</head>
+<body class="cyber-grid selection:bg-cyber-red selection:text-white relative">
+
+    <!-- Interactive Crosshair Follower / Canvas Preview -->
+    <div id="crosshair-overlay" class="pointer-events-none fixed inset-0 z-50 overflow-hidden hidden md:block">
+        <div id="crosshair-target" class="absolute w-12 h-12 -translate-x-1/2 -translate-y-1/2 transition-transform duration-75 ease-out opacity-40">
+            <svg viewBox="0 0 100 100" class="w-full h-full stroke-cyber-red fill-none stroke-2">
+                <circle cx="50" cy="50" r="30" />
+                <line x1="50" y1="10" x2="50" y2="35" />
+                <line x1="50" y1="65" x2="50" y2="90" />
+                <line x1="10" y1="50" x2="35" y2="50" />
+                <line x1="65" y1="50" x2="90" y2="50" />
+                <circle cx="50" cy="50" r="3" class="fill-cyber-red" />
+            </svg>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="fixed top-0 left-0 w-full z-40 bg-cyber-black/80 backdrop-blur-md border-b border-cyber-red/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="playShotSound()">
+                <div class="relative w-10 h-10 flex items-center justify-center bg-cyber-red/20 rounded-lg border border-cyber-red">
+                    <i data-lucide="crosshair" class="w-6 h-6 text-cyber-red animate-pulse"></i>
+                </div>
+                <span class="font-orbitron text-xl sm:text-2xl font-black tracking-wider text-white">
+                    AIM<span class="text-cyber-red">PRO</span><span class="text-cyber-orange"> VIP</span>
+                </span>
+            </div>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-8 font-orbitron text-sm font-semibold tracking-wider">
+                <a href="#features" class="hover:text-cyber-red transition-colors">TÍNH NĂNG</a>
+                <a href="#calculator" class="hover:text-cyber-orange transition-colors">TÍNH ĐỘ NHẠY</a>
+                <a href="#pricing" class="hover:text-cyber-red transition-colors">GÓI DỊCH VỤ</a>
+                <a href="#guide" class="hover:text-cyber-orange transition-colors">CÀI ĐẶT</a>
+                <a href="#faq" class="hover:text-cyber-red transition-colors">FAQ</a>
+            </div>
+
+            <!-- Header CTA -->
+            <div class="hidden md:flex items-center space-x-4">
+                <button onclick="scrollToPricing()" class="cyber-btn bg-gradient-to-r from-cyber-red to-cyber-orange text-white font-orbitron font-bold px-5 py-2.5 text-sm uppercase tracking-wider flex items-center gap-2">
+                    <i data-lucide="download" class="w-4 h-4"></i> Tải VIP Ngay
+                </button>
+            </div>
+
+            <!-- Mobile Hamburger Button -->
+            <div class="md:hidden flex items-center">
+                <button id="mobile-menu-btn" class="text-white hover:text-cyber-red focus:outline-none">
+                    <i data-lucide="menu" class="w-8 h-8"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-cyber-dark/95 border-b border-cyber-red/40 px-4 pt-2 pb-6 space-y-3 font-orbitron">
+            <a href="#features" class="block py-2 text-gray-300 hover:text-cyber-red">TÍNH NĂNG</a>
+            <a href="#calculator" class="block py-2 text-gray-300 hover:text-cyber-orange">TÍNH ĐỘ NHẠY</a>
+            <a href="#pricing" class="block py-2 text-gray-300 hover:text-cyber-red">GÓI DỊCH VỤ</a>
+            <a href="#guide" class="block py-2 text-gray-300 hover:text-cyber-orange">CÀI ĐẶT</a>
+            <a href="#faq" class="block py-2 text-gray-300 hover:text-cyber-red">FAQ</a>
+            <button onclick="scrollToPricing()" class="w-full cyber-btn bg-gradient-to-r from-cyber-red to-cyber-orange text-white font-bold py-3 text-center uppercase tracking-wider mt-4">
+                Tải VIP Ngay
+            </button>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="relative min-h-screen pt-28 pb-16 flex items-center justify-center overflow-hidden">
+        <!-- Background Ambient Glows -->
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-cyber-red/20 rounded-full blur-[120px] pointer-events-none"></div>
+        <div class="absolute bottom-10 right-10 w-[300px] h-[300px] bg-cyber-orange/15 rounded-full blur-[100px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            
+            <!-- Banner Tagline -->
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyber-dark/80 border border-cyber-red/50 mb-6 animate-bounce">
+                <span class="flex h-2.5 w-2.5 rounded-full bg-cyber-red animate-ping"></span>
+                <span class="font-orbitron text-xs sm:text-sm font-bold tracking-widest text-cyber-orange uppercase">Cập Nhật Version 5.2 - Anti-Ban 100%</span>
+            </div>
+
+            <!-- Main Heading -->
+            <h1 class="font-orbitron text-4xl sm:text-6xl lg:text-7xl font-black tracking-wide leading-tight text-white mb-6">
+                HỖ TRỢ KÉO TÂM <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyber-red via-cyber-orange to-yellow-400 neon-text-red">PRO AUTO AIM</span>
+                <br>
+                <span class="text-2xl sm:text-4xl font-extrabold text-gray-300">CHUẨN HEADSHOT 100% MỌI TỰA GAME FPS</span>
+            </h1>
+
+            <p class="max-w-3xl mx-auto text-lg sm:text-xl text-gray-400 font-medium mb-10 leading-relaxed">
+                Ứng dụng tối ưu hóa cảm ứng, tự động ghim tâm ngắm vào đầu đối phương. Hỗ trợ cực tốt cho <strong class="text-white">Free Fire, PUBG Mobile, Call of Duty, Arena Breakout</strong>. Mượt mà 120 FPS - Không đơ lag - An toàn tuyệt đối!
+            </p>
+
+            <!-- Call To Actions -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-5 mb-14">
+                <button onclick="downloadApp('VIP')" class="w-full sm:w-auto cyber-btn bg-gradient-to-r from-cyber-red to-cyber-orange hover:from-cyber-orange hover:to-cyber-red text-white font-orbitron font-black text-lg px-8 py-4 uppercase tracking-wider flex items-center justify-center gap-3 group shadow-lg shadow-cyber-red/40">
+                    <i data-lucide="zap" class="w-6 h-6 fill-white group-hover:scale-125 transition-transform"></i>
+                    <span>DÙNG THỬ VIP MIỄN PHÍ</span>
+                </button>
+                <button onclick="scrollToDemo()" class="w-full sm:w-auto cyber-btn bg-cyber-dark/90 hover:bg-cyber-card border border-cyber-orange/60 text-cyber-orange hover:text-white font-orbitron font-bold text-lg px-8 py-4 uppercase tracking-wider flex items-center justify-center gap-3 transition-colors">
+                    <i data-lucide="play-circle" class="w-6 h-6"></i>
+                    <span>TÍNH ĐỘ NHẠY CỦA BẠN</span>
+                </button>
+            </div>
+
+            <!-- Countdown Timer Promotion Section -->
+            <div class="max-w-xl mx-auto bg-cyber-dark/90 p-4 sm:p-6 rounded-2xl neon-border-red relative">
+                <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-cyber-red text-white text-xs font-orbitron font-bold px-4 py-1 rounded-full uppercase tracking-wider">
+                    Ưu Đãi VIP Giảm 50% Kết Thúc Sau
+                </div>
+                <div class="grid grid-cols-4 gap-2 sm:gap-4 font-orbitron text-center mt-2">
+                    <div class="bg-cyber-black p-2 sm:p-3 rounded-lg border border-gray-800">
+                        <span id="hours" class="block text-2xl sm:text-3xl font-black text-cyber-red">02</span>
+                        <span class="text-[10px] sm:text-xs text-gray-400 uppercase">Giờ</span>
+                    </div>
+                    <div class="bg-cyber-black p-2 sm:p-3 rounded-lg border border-gray-800">
+                        <span id="minutes" class="block text-2xl sm:text-3xl font-black text-cyber-red">45</span>
+                        <span class="text-[10px] sm:text-xs text-gray-400 uppercase">Phút</span>
+                    </div>
+                    <div class="bg-cyber-black p-2 sm:p-3 rounded-lg border border-gray-800">
+                        <span id="seconds" class="block text-2xl sm:text-3xl font-black text-cyber-orange">18</span>
+                        <span class="text-[10px] sm:text-xs text-gray-400 uppercase">Giây</span>
+                    </div>
+                    <div class="bg-cyber-black p-2 sm:p-3 rounded-lg border border-gray-800">
+                        <span id="millis" class="block text-2xl sm:text-3xl font-black text-cyber-yellow">89</span>
+                        <span class="text-[10px] sm:text-xs text-gray-400 uppercase">MS</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game Logos Supported -->
+            <div class="mt-12 pt-8 border-t border-gray-800/80">
+                <p class="text-xs font-orbitron tracking-widest text-gray-500 uppercase mb-4">Hỗ trợ tương thích hoàn hảo 100% với các Game Mobile HOT nhất</p>
+                <div class="flex flex-wrap items-center justify-center gap-6 sm:gap-12 opacity-70 grayscale hover:grayscale-0 transition-all">
+                    <span class="font-orbitron font-black text-lg sm:text-xl tracking-wider text-yellow-500 flex items-center gap-1"><i data-lucide="flame" class="w-5 h-5 text-red-500"></i> FREE FIRE</span>
+                    <span class="font-orbitron font-black text-lg sm:text-xl tracking-wider text-orange-400 flex items-center gap-1"><i data-lucide="crosshair" class="w-5 h-5 text-orange-500"></i> PUBG MOBILE</span>
+                    <span class="font-orbitron font-black text-lg sm:text-xl tracking-wider text-blue-400 flex items-center gap-1"><i data-lucide="shield" class="w-5 h-5 text-blue-500"></i> COD MOBILE</span>
+                    <span class="font-orbitron font-black text-lg sm:text-xl tracking-wider text-red-500 flex items-center gap-1"><i data-lucide="target" class="w-5 h-5 text-red-500"></i> ARENA BREAKOUT</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- STATS COUNTER BAR -->
+    <section class="bg-cyber-dark/80 border-y border-cyber-red/20 py-8 relative">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div>
+                <div class="font-orbitron text-3xl sm:text-4xl font-black text-cyber-red mb-1">1.2M+</div>
+                <div class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Lượt Tải Tải Về</div>
+            </div>
+            <div>
+                <div class="font-orbitron text-3xl sm:text-4xl font-black text-cyber-orange mb-1">99.8%</div>
+                <div class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Tỷ Lệ Headshot</div>
+            </div>
+            <div>
+                <div class="font-orbitron text-3xl sm:text-4xl font-black text-cyber-yellow mb-1">0%</div>
+                <div class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Nguy Cơ Khóa Acc</div>
+            </div>
+            <div>
+                <div class="font-orbitron text-3xl sm:text-4xl font-black text-green-400 mb-1">4.9/5★</div>
+                <div class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Đánh Giá Game Thủ</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES SECTION -->
+    <section id="features" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-orbitron text-3xl sm:text-5xl font-black text-white mb-4">
+                    TÍNH NĂNG <span class="text-cyber-red neon-text-red">BÁ ĐẠO</span> HÀNG ĐẦU
+                </h2>
+                <p class="text-gray-400 text-lg max-w-2xl mx-auto">
+                    Công nghệ Regedit & AI Auto-Lock đỉnh cao giúp bạn làm chủ mọi trận đấu Ranking đỉnh cao.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                <!-- Feature 1 -->
+                <div class="bg-cyber-card p-8 rounded-2xl border border-gray-800 hover:border-cyber-red transition-all duration-300 hover:-translate-y-2 group relative overflow-hidden">
+                    <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-cyber-red/10 rounded-full group-hover:scale-150 transition-transform"></div>
+                    <div class="w-14 h-14 bg-cyber-red/20 rounded-xl flex items-center justify-center border border-cyber-red mb-6 text-cyber-red group-hover:bg-cyber-red group-hover:text-white transition-colors">
+                        <i data-lucide="target" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="font-orbitron text-xl font-bold text-white mb-3">Tự Động Bắt Tâm (Auto Headshot)</h3>
+                    <p class="text-gray-400 leading-relaxed text-sm">
+                        Thuật toán thông minh tự động hút tâm ngắm lên vị trí đầu kẻ địch ngay khi mở Scope hoặc vuốt nhẹ nút bắn.
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="bg-cyber-card p-8 rounded-2xl border border-gray-800 hover:border-cyber-orange transition-all duration-300 hover:-translate-y-2 group relative overflow-hidden">
+                    <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-cyber-orange/10 rounded-full group-hover:scale-150 transition-transform"></div>
+                    <div class="w-14 h-14 bg-cyber-orange/20 rounded-xl flex items-center justify-center border border-cyber-orange mb-6 text-cyber-orange group-hover:bg-cyber-orange group-hover:text-white transition-colors">
+                        <i data-lucide="sliders" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="font-orbitron text-xl font-bold text-white mb-3">Tối Ưu Độ Nhạy (Sensitivity DPI)</h3>
+                    <p class="text-gray-400 leading-relaxed text-sm">
+                        Tự động đo đạc cấu hình máy, kích thước màn hình để đề xuất thông số cảm ứng mượt mà và tối ưu nhất.
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="bg-cyber-card p-8 rounded-2xl border border-gray-800 hover:border-cyber-red transition-all duration-300 hover:-translate-y-2 group relative overflow-hidden">
+                    <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-cyber-red/10 rounded-full group-hover:scale-150 transition-transform"></div>
+                    <div class="w-14 h-14 bg-cyber-red/20 rounded-xl flex items-center justify-center border border-cyber-red mb-6 text-cyber-red group-hover:bg-cyber-red group-hover:text-white transition-colors">
+                        <i data-lucide="zap" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="font-orbitron text-xl font-bold text-white mb-3">Mượt Mà 120 FPS Max Frame</h3>
+                    <p class="text-gray-400 leading-relaxed text-sm">
+                        Mở khóa giới hạn cấu hình đồ họa, giải phóng RAM và làm mát CPU giúp quá trình sấy đạn cực mượt không giật lag.
+                    </p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="bg-cyber-card p-8 rounded-2xl border border-gray-800 hover:border-cyber-orange transition-all duration-300 hover:-translate-y-2 group relative overflow-hidden">
+                    <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-cyber-orange/10 rounded-full group-hover:scale-150 transition-transform"></div>
+                    <div class="w-14 h-14 bg-cyber-orange/20 rounded-xl flex items-center justify-center border border-cyber-orange mb-6 text-cyber-orange group-hover:bg-cyber-orange group-hover:text-white transition-colors">
+                        <i data-lucide="crosshair" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="font-orbitron text-xl font-bold text-white mb-3">Bắn Không Giật (No Recoil)</h3>
+                    <p class="text-gray-400 leading-relaxed text-sm">
+                        Triệt tiêu độ nẩy của các dòng súng như AK47, M416, Groza, Bizon... Đạn đi thẳng một đường duy nhất.
+                    </p>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="bg-cyber-card p-8 rounded-2xl border border-gray-800 hover:border-cyber-red transition-all duration-300 hover:-translate-y-2 group relative overflow-hidden">
+                    <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-cyber-red/10 rounded-full group-hover:scale-150 transition-transform"></div>
+                    <div class="w-14 h-14 bg-cyber-red/20 rounded-xl flex items-center justify-center border border-cyber-red mb-6 text-cyber-red group-hover:bg-cyber-red group-hover:text-white transition-colors">
+                        <i data-lucide="shield-check" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="font-orbitron text-xl font-bold text-white mb-3">An Toàn 100% Anti-Ban VIP</h3>
+                    <p class="text-gray-400 leading-relaxed text-sm">
+                        Hoạt động dưới dạng tệp bổ trợ cảm ứng bề mặt, không can thiệp sâu vô File Game nên An toàn tuyệt đối với Anti-cheat.
+                    </p>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="bg-cyber-card p-8 rounded-2xl border border-gray-800 hover:border-cyber-orange transition-all duration-300 hover:-translate-y-2 group relative overflow-hidden">
+                    <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-cyber-orange/10 rounded-full group-hover:scale-150 transition-transform"></div>
+                    <div class="w-14 h-14 bg-cyber-orange/20 rounded-xl flex items-center justify-center border border-cyber-orange mb-6 text-cyber-orange group-hover:bg-cyber-orange group-hover:text-white transition-colors">
+                        <i data-lucide="smartphone" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="font-orbitron text-xl font-bold text-white mb-3">Tương Thích iOS & Android</h3>
+                    <p class="text-gray-400 leading-relaxed text-sm">
+                        Không cần Root máy Android, không cần Jailbreak iPhone/iPad. Cài đặt 1 Click chạy ngay tức thì.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- INTERACTIVE DEMO: SENSITIVITY CALCULATOR TOOL -->
+    <section id="calculator" class="py-20 bg-cyber-dark relative border-y border-cyber-red/20">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <span class="text-cyber-orange font-orbitron font-bold tracking-widest text-sm uppercase">Công Cụ Độc Quyền</span>
+                <h2 class="font-orbitron text-3xl sm:text-4xl font-black text-white mt-1">
+                    BỘ TÍNH ĐỘ NHẠY KÉO TÂM CHUẨN XÁC
+                </h2>
+                <p class="text-gray-400 text-sm mt-2">Chọn thông số thiết bị để AI xuất mã độ nhạy (Sensitivity Code) chuẩn nhất cho bạn</p>
+            </div>
+
+            <div class="bg-cyber-black p-6 sm:p-10 rounded-3xl border border-cyber-red/40 shadow-2xl relative overflow-hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    
+                    <!-- Form Controls -->
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block font-orbitron text-sm font-semibold text-gray-300 mb-2">1. Chọn Tựa Game</label>
+                            <select id="calc-game" class="w-full bg-cyber-card border border-gray-700 rounded-xl px-4 py-3 font-semibold text-white focus:outline-none focus:border-cyber-red">
+                                <option value="ff">Garena Free Fire / FF Max</option>
+                                <option value="pubg">PUBG Mobile / VNG</option>
+                                <option value="cod">Call of Duty Mobile</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block font-orbitron text-sm font-semibold text-gray-300 mb-2">2. Hệ Điều Hành / Thiết Bị</label>
+                            <select id="calc-device" class="w-full bg-cyber-card border border-gray-700 rounded-xl px-4 py-3 font-semibold text-white focus:outline-none focus:border-cyber-red">
+                                <option value="ios">iPhone / iPad (iOS)</option>
+                                <option value="android-high">Android (Ram 8GB+ / Chip Snap 8 Gen x)</option>
+                                <option value="android-mid">Android tầm trung (Ram 4-6GB)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="font-orbitron text-sm font-semibold text-gray-300">3. Kích thước Nút Bắn (Fire Button):</label>
+                                <span id="btn-size-val" class="font-orbitron font-bold text-cyber-red">45%</span>
+                            </div>
+                            <input type="range" id="calc-btn-size" min="30" max="70" value="45" class="w-full accent-cyber-red cursor-pointer" oninput="document.getElementById('btn-size-val').innerText = this.value + '%'">
+                        </div>
+
+                        <button onclick="calculateSens()" class="w-full cyber-btn bg-gradient-to-r from-cyber-red to-cyber-orange text-white font-orbitron font-bold py-3.5 rounded-xl uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-cyber-red/30">
+                            <i data-lucide="calculator" class="w-5 h-5"></i>
+                            TẠO ĐỘ NHẠY TỐI ƯU
+                        </button>
+                    </div>
+
+                    <!-- Output Results Display -->
+                    <div class="bg-cyber-card p-6 rounded-2xl border border-gray-800 flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-orbitron font-bold text-cyber-orange tracking-wider text-sm mb-4 uppercase border-b border-gray-800 pb-2">
+                                <i data-lucide="cpu" class="inline w-4 h-4 mr-1"></i> Kết Quả Đề Xuất Từ AI
+                            </h4>
+                            
+                            <div class="space-y-3 font-orbitron text-sm" id="sens-results">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-400">Nhìn Quanh (General):</span>
+                                    <span class="font-black text-white text-lg" id="sens-general">100</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-400">Red Dot Sight:</span>
+                                    <span class="font-black text-cyber-red text-lg" id="sens-reddot">95</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-400">Ống Ngắm 2x:</span>
+                                    <span class="font-black text-white text-lg" id="sens-2x">90</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-400">Ống Ngắm 4x:</span>
+                                    <span class="font-black text-white text-lg" id="sens-4x">85</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-400">DPI Khuyên Dùng:</span>
+                                    <span class="font-black text-cyber-yellow text-lg" id="sens-dpi">580 DPI</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 pt-4 border-t border-gray-800">
+                            <p class="text-xs text-gray-500 mb-2">Sao chép mã cài đặt nhanh vào App Hỗ Trợ Kéo Tâm:</p>
+                            <div class="flex gap-2">
+                                <input type="text" id="sens-code" readonly value="AIMPRO-FF-IOS-9981" class="w-full bg-cyber-black text-cyber-orange font-mono text-xs px-3 py-2 rounded border border-gray-800">
+                                <button onclick="copySensCode()" class="bg-cyber-red text-white px-4 py-2 rounded text-xs font-orbitron font-bold hover:bg-red-700 transition-colors">
+                                    COPY
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING / PACKAGES SECTION -->
+    <section id="pricing" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-orbitron text-3xl sm:text-5xl font-black text-white mb-4">
+                    BẢNG GIÁ <span class="text-cyber-orange neon-text-orange">GÓI DỊCH VỤ</span>
+                </h2>
+                <p class="text-gray-400 text-lg max-w-2xl mx-auto">
+                    Lựa chọn gói phù hợp để nâng cấp kỹ năng ngay hôm nay. Hỗ trợ thanh toán linh hoạt qua Momo, Banking.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+
+                <!-- Plan Free -->
+                <div class="bg-cyber-card p-8 rounded-3xl border border-gray-800 flex flex-col justify-between hover:border-gray-600 transition-all">
+                    <div>
+                        <div class="font-orbitron font-bold text-gray-400 tracking-widest text-sm mb-2">GÓI MIỄN PHÍ</div>
+                        <div class="font-orbitron text-4xl font-black text-white mb-6">0 VNĐ</div>
+                        <ul class="space-y-4 text-sm text-gray-300 font-medium mb-8">
+                            <li class="flex items-center gap-3"><i data-lucide="check" class="w-5 h-5 text-green-400"></i> Hỗ trợ độ nhạy cơ bản</li>
+                            <li class="flex items-center gap-3"><i data-lucide="check" class="w-5 h-5 text-green-400"></i> Bắn giảm giật 30%</li>
+                            <li class="flex items-center gap-3"><i data-lucide="check" class="w-5 h-5 text-green-400"></i> FPS tối đa 60 FPS</li>
+                            <li class="flex items-center gap-3 opacity-50"><i data-lucide="x" class="w-5 h-5 text-red-500"></i> Không có Auto Hút Tâm</li>
+                            <li class="flex items-center gap-3 opacity-50"><i data-lucide="x" class="w-5 h-5 text-red-500"></i> Có hiện quảng cáo</li>
+                        </ul>
+                    </div>
+                    <button onclick="downloadApp('Miễn Phí')" class="w-full bg-gray-800 hover:bg-gray-700 text-white font-orbitron font-bold py-3.5 rounded-xl uppercase tracking-wider transition-colors">
+                        Tải Bản Miễn Phí
+                    </button>
+                </div>
+
+                <!-- Plan VIP Month (FEATURED) -->
+                <div class="bg-cyber-dark p-8 rounded-3xl border-2 border-cyber-red relative flex flex-col justify-between shadow-2xl shadow-cyber-red/30 scale-105 z-10">
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-cyber-red to-cyber-orange text-white text-xs font-orbitron font-extrabold px-6 py-1.5 rounded-full uppercase tracking-widest shadow-md">
+                        🔥 BÁN CHẠY NHẤT
+                    </div>
+                    <div>
+                        <div class="font-orbitron font-bold text-cyber-red tracking-widest text-sm mb-2">GÓI VIP THÁNG</div>
+                        <div class="flex items-baseline gap-2 mb-6">
+                            <span class="font-orbitron text-4xl font-black text-white">99.000đ</span>
+                            <span class="text-gray-500 line-through font-orbitron text-lg">199.000đ</span>
+                            <span class="text-xs text-cyber-orange font-bold font-orbitron">/ tháng</span>
+                        </div>
+                        <ul class="space-y-4 text-sm text-gray-200 font-medium mb-8">
+                            <li class="flex items-center gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-cyber-red"></i> Auto Headshot Bắt Tâm 99%</li>
+                            <li class="flex items-center gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-cyber-red"></i> Giảm Giật Súng 90% (No Recoil)</li>
+                            <li class="flex items-center gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-cyber-red"></i> Mở Khóa Đồ Họa 120 FPS</li>
+                            <li class="flex items-center gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-cyber-red"></i> Bảo Vệ Anti-Ban Chống Khóa Acc</li>
+                            <li class="flex items-center gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-cyber-red"></i> Bật Menu Mod Nổi Trong Game</li>
+                        </ul>
+                    </div>
+                    <button onclick="downloadApp('VIP Tháng')" class="w-full cyber-btn bg-gradient-to-r from-cyber-red to-cyber-orange text-white font-orbitron font-black py-4 rounded-xl uppercase tracking-wider shadow-lg shadow-cyber-red/50">
+                        ĐĂNG KÝ VIP THÁNG
+                    </button>
+                </div>
+
+                <!-- Plan Lifetime -->
+                <div class="bg-cyber-card p-8 rounded-3xl border border-cyber-orange/40 flex flex-col justify-between hover:border-cyber-orange transition-all">
+                    <div>
+                        <div class="font-orbitron font-bold text-cyber-orange tracking-widest text-sm mb-2">GÓI VĨNH VIỄN</div>
+                        <div class="flex items-baseline gap-2 mb-6">
+                            <span class="font-orbitron text-4xl font-black text-white">249.000đ</span>
+                            <span class="text-gray-500 line-through font-orbitron text-lg">499.000đ</span>
+                        </div>
+                        <ul class="space-y-4 text-sm text-gray-300 font-medium mb-8">
+                            <li class="flex items-center gap-3"><i data-lucide="check" class="w-5 h-5 text-cyber-orange"></i> Full Toàn Bộ Tính Năng VIP</li>
+                            <li class="flex items-center gap-3"><i data-lucide="check" class="w-5 h-5 text-cyber-orange"></i> Sử Dụng Vĩnh Viễn Không Gia Hạn</li>
+                            <li class="flex items-center gap-3"><i data-lucide="check" class="w-5 h-5 text-cyber-orange"></i> Cập Nhật Tự Động Phiên Bản Mới</li>
+                            <li class="flex items-center gap-3"><i data-lucide="check" class="w-5 h-5 text-cyber-orange"></i> Hỗ Trợ Kỹ Thuật 1-1 Riêng 24/7</li>
+                            <li class="flex items-center gap-3"><i data-lucide="check" class="w-5 h-5 text-cyber-orange"></i> Tặng Config Tâm Ngắm Trùm Server</li>
+                        </ul>
+                    </div>
+                    <button onclick="downloadApp('Vĩnh Viễn')" class="w-full bg-cyber-dark hover:bg-cyber-orange text-cyber-orange hover:text-white border border-cyber-orange font-orbitron font-bold py-3.5 rounded-xl uppercase tracking-wider transition-all">
+                        MUA VĨNH VIỄN
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- INSTALLATION GUIDE (4 STEPS) -->
+    <section id="guide" class="py-20 bg-cyber-dark/60 border-y border-cyber-red/20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="text-cyber-red font-orbitron font-bold tracking-widest text-sm uppercase">Dễ Dàng & Nhanh Chóng</span>
+                <h2 class="font-orbitron text-3xl sm:text-4xl font-black text-white mt-1">
+                    4 BƯỚC CÀI ĐẶT TRONG 30 GIÂY
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Step 1 -->
+                <div class="bg-cyber-card p-6 rounded-2xl border border-gray-800 relative">
+                    <span class="font-orbitron text-5xl font-black text-cyber-red/20 absolute top-4 right-4">01</span>
+                    <div class="w-10 h-10 bg-cyber-red text-white font-orbitron font-bold rounded-lg flex items-center justify-center mb-4">1</div>
+                    <h3 class="font-orbitron font-bold text-lg text-white mb-2">Tải Ứng Dụng</h3>
+                    <p class="text-gray-400 text-sm">Bấm vào nút "Tải Ngay" để nhận file APK hoặc tệp IPA cấu hình chuẩn cho máy.</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="bg-cyber-card p-6 rounded-2xl border border-gray-800 relative">
+                    <span class="font-orbitron text-5xl font-black text-cyber-red/20 absolute top-4 right-4">02</span>
+                    <div class="w-10 h-10 bg-cyber-orange text-white font-orbitron font-bold rounded-lg flex items-center justify-center mb-4">2</div>
+                    <h3 class="font-orbitron font-bold text-lg text-white mb-2">Mở Cấp Quyền</h3>
+                    <p class="text-gray-400 text-sm">Mở app và cấp quyền Hiển thị trên ứng dụng khác (Overlay Menu) cực kỳ dễ dàng.</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="bg-cyber-card p-6 rounded-2xl border border-gray-800 relative">
+                    <span class="font-orbitron text-5xl font-black text-cyber-red/20 absolute top-4 right-4">03</span>
+                    <div class="w-10 h-10 bg-cyber-yellow text-black font-orbitron font-bold rounded-lg flex items-center justify-center mb-4">3</div>
+                    <h3 class="font-orbitron font-bold text-lg text-white mb-2">Chọn Game & Bật Kéo Tâm</h3>
+                    <p class="text-gray-400 text-sm">Chọn game bạn đang chơi (Free Fire, PUBG...) và gạt công tắc kích hoạt Auto Aim VIP.</p>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="bg-cyber-card p-6 rounded-2xl border border-gray-800 relative">
+                    <span class="font-orbitron text-5xl font-black text-cyber-red/20 absolute top-4 right-4">04</span>
+                    <div class="w-10 h-10 bg-green-500 text-white font-orbitron font-bold rounded-lg flex items-center justify-center mb-4">4</div>
+                    <h3 class="font-orbitron font-bold text-lg text-white mb-2">Vào Game & Chiến</h3>
+                    <p class="text-gray-400 text-sm">Mở game và trải nghiệm cảm giác bắn phát nào nổ đầu phát đó cực đã tay!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS / STREAMER REVIEWS -->
+    <section class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-orbitron text-3xl sm:text-4xl font-black text-white mb-4">
+                    GAME THỦ NÓI GÌ VỀ <span class="text-cyber-red">AIMPRO VIP</span>
+                </h2>
+                <p class="text-gray-400 text-lg">Hơn 1.000.000+ người chơi đã đạt Top 1 Thách Đấu thành công</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Review 1 -->
+                <div class="bg-cyber-card p-6 rounded-2xl border border-gray-800">
+                    <div class="flex items-center gap-1 text-cyber-yellow mb-4">
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                    </div>
+                    <p class="text-gray-300 italic mb-6 text-sm">
+                        "Dùng app này kéo tâm Free Fire sướng thật sự anh em ạ! Bật bản VIP lên vuốt nhẹ cái là đỏ lòng full Headshot. Leo Thách Đấu trong đúng 3 ngày."
+                    </p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-cyber-red/30 rounded-full border border-cyber-red flex items-center justify-center font-bold text-cyber-red">
+                            H
+                        </div>
+                        <div>
+                            <div class="font-orbitron font-bold text-white text-sm">Hoàng "ProGamer"</div>
+                            <div class="text-xs text-cyber-orange">Free Fire - Quân Đoàn Thách Đấu</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 2 -->
+                <div class="bg-cyber-card p-6 rounded-2xl border border-gray-800">
+                    <div class="flex items-center gap-1 text-cyber-yellow mb-4">
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                    </div>
+                    <p class="text-gray-300 italic mb-6 text-sm">
+                        "Sấy AKM 6x trong PUBG Mobile bình thường giật bắn lên trời, xài app này đạn đi gom đúng 1 điểm. Đặc biệt Anti-ban an toàn dùng acc chính 6 tháng nay không sao."
+                    </p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-cyber-orange/30 rounded-full border border-cyber-orange flex items-center justify-center font-bold text-cyber-orange">
+                            T
+                        </div>
+                        <div>
+                            <div class="font-orbitron font-bold text-white text-sm">Tuấn Sniper</div>
+                            <div class="text-xs text-cyber-red">PUBG Mobile - Top Conqueror</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 3 -->
+                <div class="bg-cyber-card p-6 rounded-2xl border border-gray-800">
+                    <div class="flex items-center gap-1 text-cyber-yellow mb-4">
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                    </div>
+                    <p class="text-gray-300 italic mb-6 text-sm">
+                        "Máy Android tầm trung chơi giật lag khó ngắm, xài tính năng Mượt 120 FPS kết hợp tính độ nhạy của bên này mượt căng đét. Rất đáng tiền gói Vĩnh Viễn!"
+                    </p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-cyber-yellow/30 rounded-full border border-cyber-yellow flex items-center justify-center font-bold text-cyber-yellow">
+                            M
+                        </div>
+                        <div>
+                            <div class="font-orbitron font-bold text-white text-sm">Minh Streamer</div>
+                            <div class="text-xs text-gray-400">Creator TikTok Gaming</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ SECTION -->
+    <section id="faq" class="py-20 bg-cyber-dark/80 relative border-t border-cyber-red/20">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-orbitron text-3xl sm:text-4xl font-black text-white mb-2">
+                    CÂU HỎI THƯỜNG GẶP (FAQ)
+                </h2>
+                <p class="text-gray-400">Giải đáp mọi thắc mắc của bạn trước khi sử dụng</p>
+            </div>
+
+            <div class="space-y-4" id="faq-accordion">
+                <!-- FAQ Item 1 -->
+                <div class="bg-cyber-card rounded-xl border border-gray-800 overflow-hidden">
+                    <button onclick="toggleFaq(1)" class="w-full text-left p-5 font-orbitron font-bold text-white flex justify-between items-center hover:text-cyber-red transition-colors">
+                        <span>1. Dùng ứng dụng Hỗ Trợ Kéo Tâm có bị khóa tài khoản (Ban Acc) không?</span>
+                        <i data-lucide="chevron-down" id="faq-icon-1" class="w-5 h-5 text-cyber-red transition-transform"></i>
+                    </button>
+                    <div id="faq-ans-1" class="hidden px-5 pb-5 text-gray-400 text-sm leading-relaxed border-t border-gray-800/50 pt-3">
+                        Hoàn toàn KHÔNG. Ứng dụng hoạt động dựa trên cơ chế tối ưu hóa độ nhạy màn hình và mô phỏng thao tác cảm ứng bề mặt (Touch Overlay), không can thiệp hay sửa đổi Code/File gốc của Nhà phát hành game. Đảm bảo an toàn 100% Anti-Ban.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="bg-cyber-card rounded-xl border border-gray-800 overflow-hidden">
+                    <button onclick="toggleFaq(2)" class="w-full text-left p-5 font-orbitron font-bold text-white flex justify-between items-center hover:text-cyber-red transition-colors">
+                        <span>2. Ứng dụng hỗ trợ những dòng máy nào?</span>
+                        <i data-lucide="chevron-down" id="faq-icon-2" class="w-5 h-5 text-cyber-red transition-transform"></i>
+                    </button>
+                    <div id="faq-ans-2" class="hidden px-5 pb-5 text-gray-400 text-sm leading-relaxed border-t border-gray-800/50 pt-3">
+                        AIMPRO hỗ trợ tất cả các thiết bị chạy Android (phiên bản Android 7.0 trở lên) và iOS (iPhone, iPad). Không yêu cầu Root máy hay Jailbreak thiết bị.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="bg-cyber-card rounded-xl border border-gray-800 overflow-hidden">
+                    <button onclick="toggleFaq(3)" class="w-full text-left p-5 font-orbitron font-bold text-white flex justify-between items-center hover:text-cyber-red transition-colors">
+                        <span>3. Sự khác biệt giữa bản Miễn Phí và bản VIP?</span>
+                        <i data-lucide="chevron-down" id="faq-icon-3" class="w-5 h-5 text-cyber-red transition-transform"></i>
+                    </button>
+                    <div id="faq-ans-3" class="hidden px-5 pb-5 text-gray-400 text-sm leading-relaxed border-t border-gray-800/50 pt-3">
+                        Bản Miễn Phí chỉ hỗ trợ bảng tính độ nhạy cơ bản. Bản VIP mở khóa toàn bộ tính năng cao cấp: Auto Ghim Tâm Headshot, Giảm giật súng 90%, Mở khóa 120 FPS, Menu MOD nổi thao tác cực nhanh trong game.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 4 -->
+                <div class="bg-cyber-card rounded-xl border border-gray-800 overflow-hidden">
+                    <button onclick="toggleFaq(4)" class="w-full text-left p-5 font-orbitron font-bold text-white flex justify-between items-center hover:text-cyber-red transition-colors">
+                        <span>4. Sau khi thanh toán mua VIP thì nhận tài khoản thế nào?</span>
+                        <i data-lucide="chevron-down" id="faq-icon-4" class="w-5 h-5 text-cyber-red transition-transform"></i>
+                    </button>
+                    <div id="faq-ans-4" class="hidden px-5 pb-5 text-gray-400 text-sm leading-relaxed border-t border-gray-800/50 pt-3">
+                        Hệ thống kích hoạt hoàn toàn tự động! Sau khi bạn bấm đăng ký và hoàn tất thanh toán Momo/Banking, Mã kích hoạt Key VIP sẽ được gửi ngay lập tức qua Zalo / Số điện thoại của bạn trong 5 giây.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-cyber-black pt-16 pb-8 border-t border-gray-800 text-gray-400 text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+                
+                <!-- Brand Info -->
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-2">
+                        <i data-lucide="crosshair" class="w-6 h-6 text-cyber-red"></i>
+                        <span class="font-orbitron text-xl font-black text-white">AIMPRO VIP</span>
+                    </div>
+                    <p class="text-xs text-gray-500 leading-relaxed">
+                        Phần mềm hỗ trợ kéo tâm, tối ưu hóa cảm ứng chơi game hàng đầu Châu Á. Đồng hành cùng hàng triệu game thủ chinh phục các giải đấu eSports đỉnh cao.
+                    </p>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="font-orbitron font-bold text-white mb-4 uppercase tracking-wider text-xs">Liên Kết Nhanh</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#features" class="hover:text-cyber-red">Tính Năng VIP</a></li>
+                        <li><a href="#calculator" class="hover:text-cyber-orange">Tính Độ Nhạy Sens</a></li>
+                        <li><a href="#pricing" class="hover:text-cyber-red">Bảng Giá Gói VIP</a></li>
+                        <li><a href="#guide" class="hover:text-cyber-orange">Hướng Dẫn Cài Đặt</a></li>
+                    </ul>
+                </div>
+
+                <!-- Legal & Safety -->
+                <div>
+                    <h4 class="font-orbitron font-bold text-white mb-4 uppercase tracking-wider text-xs">Chính Sách & An Toàn</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#" class="hover:text-cyber-red">Điều Khoản Dịch Vụ</a></li>
+                        <li><a href="#" class="hover:text-cyber-red">Chính Sách Bảo Mật</a></li>
+                        <li><a href="#" class="hover:text-cyber-red">Cam Kết Anti-Ban 100%</a></li>
+                        <li><a href="#" class="hover:text-cyber-red">Chính Sách Hoàn Tiền</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact & Social -->
+                <div>
+                    <h4 class="font-orbitron font-bold text-white mb-4 uppercase tracking-wider text-xs">Hỗ Trợ Kỹ Thuật 24/7</h4>
+                    <div class="space-y-2 text-xs mb-4">
+                        <p class="flex items-center gap-2"><i data-lucide="phone" class="w-4 h-4 text-cyber-red"></i> Hotline/Zalo: <span class="text-white font-bold">0988.XXX.XXX</span></p>
+                        <p class="flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-cyber-orange"></i> Email: support@keotampro.vip</p>
+                        <p class="flex items-center gap-2"><i data-lucide="clock" class="w-4 h-4 text-cyber-yellow"></i> Thời gian: 24/7 Cả Lễ Tết</p>
+                    </div>
+                    <div class="flex space-x-3">
+                        <a href="#" class="w-8 h-8 bg-cyber-card rounded flex items-center justify-center text-white hover:bg-cyber-red transition-colors"><i class="fab font-bold fa-facebook-f"></i></a>
+                        <a href="#" class="w-8 h-8 bg-cyber-card rounded flex items-center justify-center text-white hover:bg-cyber-orange transition-colors"><i class="fab fa-youtube"></i></a>
+                        <a href="#" class="w-8 h-8 bg-cyber-card rounded flex items-center justify-center text-white hover:bg-cyber-red transition-colors"><i class="fab fa-tiktok"></i></a>
+                        <a href="#" class="w-8 h-8 bg-cyber-card rounded flex items-center justify-center text-white hover:bg-cyber-orange transition-colors"><i class="fab fa-telegram-plane"></i></a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="border-t border-gray-800/80 pt-6 text-center text-xs text-gray-600 font-orbitron">
+                © 2026 AIMPRO VIP REGEDIT. All rights reserved. Designed for Pro Gamers.
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL POPUP FOR DOWNLOAD / PAYMENT -->
+    <div id="download-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm hidden px-4">
+        <div class="bg-cyber-card border border-cyber-red rounded-3xl p-6 sm:p-8 max-w-md w-full relative neon-border-red">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            
+            <div class="text-center">
+                <div class="w-12 h-12 bg-cyber-red/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-cyber-red">
+                    <i data-lucide="download-cloud" class="w-6 h-6 text-cyber-red"></i>
+                </div>
+                <h3 class="font-orbitron text-xl font-bold text-white mb-1">XÁC NHẬN TẢI XUỐNG</h3>
+                <p id="modal-plan-name" class="text-cyber-orange font-orbitron text-sm font-semibold mb-4">Gói VIP Tháng (99.000đ)</p>
+
+                <div class="space-y-3 text-left mb-6 bg-cyber-black p-4 rounded-xl text-xs">
+                    <p class="text-gray-300">✔ Tệp: <span class="text-white font-bold">AIMPRO_VIP_v5.2_AntiBan.apk</span></p>
+                    <p class="text-gray-300">✔ Dung lượng: <span class="text-white font-bold">18.4 MB</span></p>
+                    <p class="text-gray-300">✔ Tương thích: <span class="text-white font-bold">Android, iOS, Giả lập PC</span></p>
+                </div>
+
+                <div class="flex gap-3">
+                    <button onclick="executeDownload()" class="w-full cyber-btn bg-gradient-to-r from-cyber-red to-cyber-orange text-white font-orbitron font-bold py-3 uppercase text-sm">
+                        BẮT ĐẦU TẢI NGAY
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Mouse Crosshair Movement Effect
+        const crosshairOverlay = document.getElementById('crosshair-overlay');
+        const crosshairTarget = document.getElementById('crosshair-target');
+
+        document.addEventListener('mousemove', (e) => {
+            crosshairTarget.style.left = e.clientX + 'px';
+            crosshairTarget.style.top = e.clientY + 'px';
+        });
+
+        // Simulated Sound Effect on Shot / Click
+        function playShotSound() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(300, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.15);
+                
+                gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+                
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                
+                osc.start();
+                osc.stop(ctx.currentTime + 0.15);
+            } catch(e) {
+                // Audio context fallback
+            }
+        }
+
+        // Add sound trigger on buttons
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', playShotSound);
+        });
+
+        // Countdown Timer Logic
+        let totalSeconds = 2 * 3600 + 45 * 60 + 18;
+        let millis = 99;
+
+        setInterval(() => {
+            millis--;
+            if (millis < 0) {
+                millis = 99;
+                totalSeconds--;
+            }
+
+            if (totalSeconds < 0) {
+                totalSeconds = 3600 * 5; // reset promo loop
+            }
+
+            const hrs = Math.floor(totalSeconds / 3600);
+            const mins = Math.floor((totalSeconds % 3600) / 60);
+            const secs = totalSeconds % 60;
+
+            document.getElementById('hours').innerText = hrs.toString().padStart(2, '0');
+            document.getElementById('minutes').innerText = mins.toString().padStart(2, '0');
+            document.getElementById('seconds').innerText = secs.toString().padStart(2, '0');
+            document.getElementById('millis').innerText = millis.toString().padStart(2, '0');
+        }, 10);
+
+        // FAQ Toggle Accordion
+        function toggleFaq(index) {
+            const ans = document.getElementById(`faq-ans-${index}`);
+            const icon = document.getElementById(`faq-icon-${index}`);
+            
+            if (ans.classList.contains('hidden')) {
+                ans.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                ans.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Sensitivity Calculator Functionality
+        function calculateSens() {
+            const game = document.getElementById('calc-game').value;
+            const device = document.getElementById('calc-device').value;
+            const btnSize = parseInt(document.getElementById('calc-btn-size').value);
+
+            let gen = 95, reddot = 90, scope2 = 85, scope4 = 80, dpi = '520 DPI';
+
+            if (game === 'ff') {
+                if (device === 'ios') {
+                    gen = 100; reddot = 98; scope2 = 95; scope4 = 92; dpi = 'Mặc định iOS (Cực Nhạy)';
+                } else if (device === 'android-high') {
+                    gen = 96; reddot = 92; scope2 = 88; scope4 = 85; dpi = '580 DPI';
+                } else {
+                    gen = 100; reddot = 100; scope2 = 95; scope4 = 90; dpi = '600 DPI';
+                }
+            } else if (game === 'pubg') {
+                gen = 85; reddot = 60; scope2 = 50; scope4 = 35; dpi = '480 DPI';
+            } else {
+                gen = 90; reddot = 75; scope2 = 65; scope4 = 55; dpi = '500 DPI';
+            }
+
+            // Adjust by button size
+            gen = Math.min(100, gen + Math.floor((50 - btnSize) / 2));
+
+            document.getElementById('sens-general').innerText = gen;
+            document.getElementById('sens-reddot').innerText = reddot;
+            document.getElementById('sens-2x').innerText = scope2;
+            document.getElementById('sens-4x').innerText = scope4;
+            document.getElementById('sens-dpi').innerText = dpi;
+
+            const randomCode = 'AIMPRO-' + game.toUpperCase() + '-' + Math.floor(1000 + Math.random() * 9000);
+            document.getElementById('sens-code').value = randomCode;
+        }
+
+        function copySensCode() {
+            const codeInput = document.getElementById('sens-code');
+            codeInput.select();
+            document.execCommand('copy');
+            alert('Đã sao chép mã độ nhạy: ' + codeInput.value + '\nHãy dán mã này vào App Kéo Tâm Pro để áp dụng!');
+        }
+
+        // Navigation Helpers
+        function scrollToPricing() {
+            document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function scrollToDemo() {
+            document.getElementById('calculator').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Modal Action
+        function downloadApp(plan) {
+            document.getElementById('modal-plan-name').innerText = 'Gói Đã Chọn: ' + plan;
+            document.getElementById('download-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('download-modal').classList.add('hidden');
+        }
+
+        function executeDownload() {
+            alert('🚀 Đang bắt đầu tải xuống tệp cài đặt VIP Anti-Ban...\nVui lòng kiểm tra thanh thông báo trình duyệt của bạn!');
+            closeModal();
+        }
+    </script>
+</body>
+</html>
